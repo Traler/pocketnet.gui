@@ -683,6 +683,7 @@ var comments = (function(){
 						if (str.length)
 							ecaretPosition(el, 0, str.length)
 
+						events.alertBlockedUser(el, 'reply', address)
 
 					}, {
 						placeholder : "Send Reply",
@@ -1222,6 +1223,53 @@ var comments = (function(){
 				var parent = _el.closest('.comment');
 
 				parent.removeClass('hiddenBlockedUserComment')
+			},
+
+			alertBlockedUser: function(elem, context, address = receiver) {
+				const usersStorage = app.platform.sdk.usersl.storage;
+				const userNumId = usersStorage[address].id;
+
+				const alertMessage = self.app.localization.e("cantCommentHere");
+
+				const isReply = (context == 'reply');
+				const isPost = (context == 'post');
+				const isBlockingYou = isBlocksMe(userNumId);
+
+				if (!isBlockingYou) {
+					return;
+				}
+
+				if (isReply) {
+					blockMessageInput(elem[0]);
+				}
+
+				if (isPost) {
+					const leaveCommentPreview = el.c.find('.leaveCommentPreview')[0];
+					blockMessageInput(leaveCommentPreview);
+				}
+
+				function isBlocksMe(targetUserNumId) {
+					let result = false;
+					localStorage.blockingUsers.split(',').forEach(userNumId=>{
+						const youAreBlocked = targetUserNumId == userNumId;
+						if (youAreBlocked){
+							result = true;
+						}
+					});
+					return result;
+				}
+
+				function blockMessageInput(messageInput) {
+					messageInput.innerText = alertMessage;
+
+					messageInput.setAttribute('placeholder', '');
+					messageInput.setAttribute('contenteditable', false);
+					messageInput.setAttribute('readonly', 'readonly');
+
+					messageInput.classList.add('youAreBlockedUser');
+
+					$(messageInput).off('click');
+				}
 			},
 
 			openGallery : function(){
@@ -2092,7 +2140,7 @@ var comments = (function(){
 
 				})
 
-				
+				events.alertBlockedUser(null, 'post');
 			},
 
 

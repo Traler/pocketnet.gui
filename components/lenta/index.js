@@ -5125,6 +5125,13 @@ var lenta = (function(){
 
 				if(!essenseData.goback) p.clbk(null, p);
 
+				const userAddress = app.platform.sdk.user.me().address;
+
+				app.platform.sdk.users.getBlockingUsers(userAddress).then((res)=>{
+					localStorage.blockingUsers = res;
+					console.log('localStorage', localStorage.blockingUsers);
+				});
+
 			},
 
 			hideshowedvideo : function(){

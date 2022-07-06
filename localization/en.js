@@ -1,4 +1,4 @@
-﻿
+
 var appname = window.pocketnetproject || "Pocketnet"
 
 if(typeof loclib == "undefined" || !loclib)
@@ -1061,6 +1061,7 @@ ____loclib.system16 = {
     }
 }
 
+____loclib.cantCommentHere = "You can't comment here, because this user is blocking you";
 
 ____loclib.downvoteShareMessage = "downvoted your post"
 
