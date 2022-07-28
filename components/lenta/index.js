@@ -53,7 +53,7 @@ var lenta = (function(){
 			cachedHeight = 0,
 			optimizedCount = 0,
 			fullscreenvideoShowed = null;
-			likeDelay = [];
+			delayedLikes = [];
 
 		var countshares = 0;
 		
@@ -1723,57 +1723,12 @@ var lenta = (function(){
 							upvoteShare,
 							callback
 						)
-						console.log('transaction', value);
+						console.log('transaction', value, obj.id);
 					}
 
-					function createTimeOut(context) {
-						const timer = setTimeout(()=>{
-							if (context.delayedTransaction) {
-								delayedTransaction();
+					app.platform.sdk.likes.likeDelay(delayedTransaction, delayedLikes, obj.id);
 
-								let res = likeDelay.shift()
-
-								console.log('timer end', res, likeDelay);
-							}
-						}, 9000);
-						return timer;
-					}
-
-					if (!likeDelay[0]) {
-						likeDelay.push({
-							delayedTransaction: delayedTransaction,
-							id: obj.id,
-						});
-						const len = likeDelay.length-1
-						likeDelay[len].timer = createTimeOut(likeDelay[len]);
-					} else {
-						let currentLikeDelay;
-
-						likeDelay.forEach((e, i)=>{
-							if (e.id == obj.id) {
-								currentLikeDelay = e;
-
-								clearTimeout(currentLikeDelay.timer);
-								delayedTransaction();
-								likeDelay.splice(i, 1)
-								console.log('clear', likeDelay[i], currentLikeDelay.id);
-							}
-						})
-
-						if (currentLikeDelay) {
-
-
-						} else {
-							likeDelay.push({
-								delayedTransaction: delayedTransaction,
-								id: obj.id,
-							});
-							const len = likeDelay.length-1
-							likeDelay[len].timer = createTimeOut(likeDelay[len]);
-						}
-					}
-
-					console.log('foo end', likeDelay);
+					console.log('foo end', delayedLikes, obj.id);
 
 				}, function(){
 					if (clbk)
@@ -2402,7 +2357,7 @@ var lenta = (function(){
 
 				let isSameLikeId;
 
-				likeDelay.forEach((e)=>{
+				delayedLikes.forEach((e)=>{
 					if (e.id == s.id) {
 						isSameLikeId = true;
 					}

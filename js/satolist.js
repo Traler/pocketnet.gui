@@ -15146,6 +15146,52 @@ Platform = function (app, listofnodes) {
                     if (clbk)
                         clbk()
                 }
+            },
+
+            likeDelay: function (delayedTransaction, delayedLikes, id) {
+                const isFirstLike = !delayedLikes[0];
+                let currentLikeDelay;
+
+                function createTimeOut(context) {
+                    const timer = setTimeout(()=>{
+                        if (context.delayedTransaction) {
+                            delayedTransaction();
+
+                            let res = delayedLikes.shift()
+
+                            console.log('timer end', res, delayedLikes);
+                        }
+                    }, 9000);
+                    return timer;
+                }
+
+                function addDelayedLike() {
+                    delayedLikes.push({
+                        delayedTransaction: delayedTransaction,
+                        id: id,
+                    });
+                    const len = delayedLikes.length-1
+                    delayedLikes[len].timer = createTimeOut(delayedLikes[len]);
+                }
+
+                if (isFirstLike) {
+                    addDelayedLike();
+                    return;
+                }
+
+                delayedLikes.forEach((e, i)=>{
+                    if (e.id == id) {
+                        currentLikeDelay = e;
+                        clearTimeout(currentLikeDelay.timer);
+                        delayedTransaction();
+                        delayedLikes.splice(i, 1)
+                    }
+                })
+
+                if (!currentLikeDelay) {
+                    addDelayedLike();
+                }
+
             }
         },
 
