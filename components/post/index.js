@@ -547,13 +547,10 @@ var post = (function () {
 			},
 
 			like: function (value, clbk) {
-
-
 				var checkvisibility = app.platform.sdk.node.shares.checkvisibility(share);
 				var reputation = deep(app, 'platform.sdk.usersl.storage.'+share.address+'.reputation') || 0
 
 				if (checkvisibility && reputation >= 50) return
-
 
 				if(value <= 3 && !self.app.test){
 					if(self.app.platform.sdk.user.scamcriteria()){
@@ -585,8 +582,6 @@ var post = (function () {
 					}
 				}
 
-				
-
 				var upvoteShare = share.upvote(value);
 
 				if(!upvoteShare) {
@@ -598,27 +593,21 @@ var post = (function () {
 					return
 				}
 
-				if (value > 4){
+				if (value == 5){
+					setTimeout(function(){
+						if(!el.c) return
 
-					var reason = null
+						const bannerComment = initedcommentes[id].showBanner();
+						if (!bannerComment) {
+							return;
+						}
 
-					if (self.app.platform.sdk.user.newuser()){
-						reason = 'n'
-					}
-
-					if (share.scnt == '0') reason = 's'
-
-					if (reason) {
-						setTimeout(function(){
-							if(!el.c) return
-								self.app.platform.effects.templates.commentstars(el.c, value, function(){
-									if (inicomments){
-										inicomments.attention(self.app.localization.e('starssendcomment' + reason))
-									}
-								})
-						}, 300)
-					}
-					
+						self.app.platform.effects.templates.commentstars(el.c, value, function(){
+							if (inicomments){
+								inicomments.attention(self.app.localization.e('starssendcomments'))
+							}
+						})
+					}, 300)
 				}
 
 				self.app.platform.sdk.upvote.checkvalue(value, function(){

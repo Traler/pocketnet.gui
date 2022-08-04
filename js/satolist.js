@@ -2702,6 +2702,7 @@ Platform = function (app, listofnodes) {
         },
 
         showCommentBanner : function(contextElem) {
+
             let bannerCommentComponent = null;
             if (!contextElem) {
                 return bannerCommentComponent;
@@ -2721,9 +2722,6 @@ Platform = function (app, listofnodes) {
 
                     clbk : function(e, p){
                         bannerCommentComponent = p;
-
-                        console.log('bannerCommentComponent', e, p);
-
                         if (p.el[0].constructor.name === 'HTMLDivElement') {
                             self.app.Logger.info({
                                 actionId: 'COMMENT_BANNER_SHOWED',
@@ -2751,7 +2749,6 @@ Platform = function (app, listofnodes) {
             const isOneDayOld = (registeredTime >= oneDayInSeconds);
 
             if (isBannerDisabled) {
-                console.log('banner showbanner', bannerCommentComponent);
                 return bannerCommentComponent;
             }
 
