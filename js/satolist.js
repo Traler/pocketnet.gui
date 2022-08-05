@@ -2749,7 +2749,7 @@ Platform = function (app, listofnodes) {
             const isOneDayOld = (registeredTime >= oneDayInSeconds);
 
             if (isBannerDisabled) {
-                return bannerCommentComponent;
+                return isBannerDisabled;
             }
 
             if (!isOneDayOld) {

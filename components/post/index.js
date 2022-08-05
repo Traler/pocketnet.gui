@@ -597,7 +597,7 @@ var post = (function () {
 					setTimeout(function(){
 						if(!el.c) return
 
-						const bannerComment = initedcommentes[id].showBanner();
+						const bannerComment = inicomments.showBanner(inicomments);
 						if (!bannerComment) {
 							return;
 						}

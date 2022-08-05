@@ -2775,7 +2775,7 @@ var comments = (function(){
 				}
 
 				if (alredyCommented) {
-					return;
+					return 'isCommented';
 				}
 
 				bannerComment = app.platform.ui.showCommentBanner(el.c);
