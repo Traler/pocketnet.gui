@@ -53,10 +53,9 @@ var lenta = (function(){
 			cachedHeight = 0,
 			optimizedCount = 0,
 			fullscreenvideoShowed = null;
-			delayedLikes = [];
+			delayedLikes = {};
 
 		var countshares = 0;
-		
 
 		var beginmaterial = null;
 		var beginmaterialloaded = false;
@@ -2343,16 +2342,15 @@ var lenta = (function(){
 
 
 			like : function(){
-				let p = $(this).closest('.stars');
+				const p = $(this).closest('.stars');
+				const value = $(this).attr('value');
 
 				let id = $(this).closest('.share').attr('id');
-				let value = $(this).attr('value')
-
 				if(!id) id = $(this).closest('.truerepost').attr('stxid')
 
 				let s = self.app.platform.sdk.node.shares.storage.trx[id]
 
-				let isSameLikeId = delayedLikes[s.id];
+				const isSameLikeId = delayedLikes[s.id];
 
 				const isAlredyLiked = p.attr('value');
 
