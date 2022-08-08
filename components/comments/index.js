@@ -2183,8 +2183,6 @@ var comments = (function(){
 				clears.isotope()
 
 				if(!p.replace){
-
-					let address = app.platform.sdk.user.me().address;
 					
 					if (ed.commentPs){
 						comments = _.filter(comments || [], function(c){
