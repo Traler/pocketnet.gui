@@ -1683,18 +1683,6 @@ var lenta = (function(){
 				}
 
 				self.app.platform.sdk.upvote.checkvalue(value, function(){
-
-					var upvoteShare = obj.upvote(value);
-
-					if(!upvoteShare){
-						self.app.platform.errorHandler('4', true)	
-
-						if(clbk)
-							clbk(false)
-
-						return
-					}
-
 					function callback(tx, error){
 						topPreloader(100)
 
@@ -1719,6 +1707,17 @@ var lenta = (function(){
 					}
 
 					const delayedTransaction = () => {
+						var upvoteShare = obj.upvote(value);
+
+						if(!upvoteShare){
+							self.app.platform.errorHandler('4', true)
+
+							if(clbk)
+								clbk(false)
+
+							return
+						}
+
 						self.sdk.node.transactions.create.commonFromUnspent(
 							upvoteShare,
 							callback
@@ -1727,8 +1726,6 @@ var lenta = (function(){
 					}
 
 					app.platform.sdk.likes.likeDelay(delayedTransaction, delayedLikes, obj.id);
-
-					console.log('foo end', delayedLikes, obj.id);
 
 				}, function(){
 					if (clbk)
@@ -2355,39 +2352,26 @@ var lenta = (function(){
 
 				let s = self.app.platform.sdk.node.shares.storage.trx[id]
 
-				let isSameLikeId;
-
-				delayedLikes.forEach((e)=>{
-					if (e.id == s.id) {
-						isSameLikeId = true;
-					}
-				})
+				let isSameLikeId = delayedLikes[s.id];
 
 				const isAlredyLiked = p.attr('value');
 
 				if (isAlredyLiked && !isSameLikeId){
 					return;
-				} else {
+				}
 
-					if (isAlredyLiked) {
-						s.myVal = null;
-						s.score = null;
-					}
-
-					p.attr('value', 0)
-					p.removeClass('liked')
+				if (isAlredyLiked && isSameLikeId) {
+					p.removeAttr('value');
+					p.removeClass('liked');
 				}
 
 				self.app.mobile.vibration.small()
 
 				actions.stateAction('_this', function(){
-
 					self.app.platform.sdk.node.shares.getbyid(id, function(){
-
 						if (self.app.platform.sdk.address.pnet() && s.address == self.app.platform.sdk.address.pnet().address) return
 
 						if (value > 4){
-
 							var reason = null
 
 							//if(!rand(0,9)) reason = 'p'
@@ -2395,10 +2379,8 @@ var lenta = (function(){
 							if (self.app.platform.sdk.user.newuser()){
 								reason = 'n'
 							}
-							
 
 							if(s.scnt == '0') reason = 's'
-
 							if(reason) {
 								setTimeout(function(){
 
@@ -2411,24 +2393,15 @@ var lenta = (function(){
 									if (initedcommentes[id]){
 										initedcommentes[id].attention(self.app.localization.e('starssendcomment' + reason))
 									}
-	
 								}, 300)
 							}
-
-							
-							
-
 						}
-
-							
 
 						p.attr('value', value)
 						p.addClass('liked')
 
 						actions.like(s, value, function(r){
 							if(r){
-								
-
 								s.scnt || (s.scnt = 0)
 								s.score || (s.score = 0)
 
@@ -2441,7 +2414,6 @@ var lenta = (function(){
 								p.closest('.itemwr').find('.count span.v').html(v.toFixed(1))
 
 								renders.stars(s)
-
 							}
 							else
 							{
@@ -2449,12 +2421,8 @@ var lenta = (function(){
 								p.removeClass('liked')
 							}
 						})
-
 					})
-
 				}, id)
-
-
 			},
 
 			complain : function(){

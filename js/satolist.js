@@ -15148,50 +15148,29 @@ Platform = function (app, listofnodes) {
                 }
             },
 
-            likeDelay: function (delayedTransaction, delayedLikes, id) {
-                const isFirstLike = !delayedLikes[0];
-                let currentLikeDelay;
-
-                function createTimeOut(context) {
+            likeDelay: function(delayedTransaction, delayedLikes, id) {
+                function createTimeOut(id) {
                     const timer = setTimeout(()=>{
-                        if (context.delayedTransaction) {
-                            delayedTransaction();
+                        if (delayedLikes[id].delayedTransaction) {
+                            delayedLikes[id].delayedTransaction();
 
-                            let res = delayedLikes.shift()
+                            delete delayedLikes[id];
 
-                            console.log('timer end', res, delayedLikes);
+                            console.log('timer end', delayedLikes);
                         }
                     }, 9000);
                     return timer;
                 }
 
-                function addDelayedLike() {
-                    delayedLikes.push({
-                        delayedTransaction: delayedTransaction,
-                        id: id,
-                    });
-                    const len = delayedLikes.length-1
-                    delayedLikes[len].timer = createTimeOut(delayedLikes[len]);
+                if (!delayedLikes[id]) {
+                    delayedLikes[id] = {};
+                    delayedLikes[id].timer = createTimeOut(id);
+                    delayedLikes[id].delayedTransaction = delayedTransaction;
+                } else {
+                    delayedTransaction();
+                    clearTimeout(delayedLikes[id].timer);
+                    delete delayedLikes[id];
                 }
-
-                if (isFirstLike) {
-                    addDelayedLike();
-                    return;
-                }
-
-                delayedLikes.forEach((e, i)=>{
-                    if (e.id == id) {
-                        currentLikeDelay = e;
-                        clearTimeout(currentLikeDelay.timer);
-                        delayedTransaction();
-                        delayedLikes.splice(i, 1)
-                    }
-                })
-
-                if (!currentLikeDelay) {
-                    addDelayedLike();
-                }
-
             }
         },
 
