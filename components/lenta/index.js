@@ -2369,30 +2369,21 @@ var lenta = (function(){
 					self.app.platform.sdk.node.shares.getbyid(id, function(){
 						if (self.app.platform.sdk.address.pnet() && s.address == self.app.platform.sdk.address.pnet().address) return
 
-						if (value > 4){
-							var reason = null
+						if (value == 5){
+							setTimeout(function(){
+								if(!el.share[id]) return
 
-							//if(!rand(0,9)) reason = 'p'
+								const bannerComment = initedcommentes[id].showBanner(initedcommentes[id]);
+								if (!bannerComment) {
+									return;
+								}
 
-							if (self.app.platform.sdk.user.newuser()){
-								reason = 'n'
-							}
-
-							if(s.scnt == '0') reason = 's'
-							if(reason) {
-								setTimeout(function(){
-
-									if(!el.share[id]) return
-	
-									self.app.platform.effects.templates.commentstars(el.share[id], value, function(){
-										
-									})
-
+								self.app.platform.effects.templates.commentstars(el.share[id], value, function(){
 									if (initedcommentes[id]){
-										initedcommentes[id].attention(self.app.localization.e('starssendcomment' + reason))
+										initedcommentes[id].attention(self.app.localization.e('starssendcomments'))
 									}
-								}, 300)
-							}
+								})
+							}, 300)
 						}
 
 						p.attr('value', value)
@@ -3795,7 +3786,7 @@ var lenta = (function(){
 
 					boostloadedblock = self.app.platform.currentBlock
 
-				
+
 					if(clbk) clbk(shares)
 
 				}, _.toArray(boostplaces).length, cache)
@@ -3999,9 +3990,9 @@ var lenta = (function(){
 
 								shares = _.filter(shares, function(share){
 
-									if(!me) return true 
+									if(!me) return true
 
-									var r = me.relation(share.address, 'blocking') 
+									var r = me.relation(share.address, 'blocking')
 
 									if (r) return false
 
@@ -4160,7 +4151,7 @@ var lenta = (function(){
 
 							var _beginmaterial = ''
 
-							
+
 
 							if(!author){
 								loader = self.app.platform.sdk.lentaMethod.get();

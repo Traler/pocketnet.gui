@@ -2745,6 +2745,11 @@ Platform = function (app, listofnodes) {
             }
 
             const createComponent = () => {
+                self.app.Logger.info({
+                    actionId: 'COMMENT_BANNER_ALLOWED',
+                    value: true,
+                });
+
                 app.nav.api.load({
                     open: true,
                     id: 'commentBanner',
@@ -2753,12 +2758,20 @@ Platform = function (app, listofnodes) {
 
                     clbk : function(e, p){
                         bannerCommentComponent = p;
+                        if (p.el[0].constructor.name === 'HTMLDivElement') {
+                            self.app.Logger.info({
+                                actionId: 'COMMENT_BANNER_SHOWED',
+                                value: p.el[0].constructor.name,
+                            });
+
+                            return;
+                        }
                     }
                 });
             };
 
             const unixTimeNow = Math.floor(Date.now() / 1000);
-            const oneDayInSeconds = 86400000;
+            const oneDayInSeconds = 86400;
 
             const alreadyShowed = ('nextCommentBanner' in localStorage);
             const isBannerDisabled = (localStorage.nextCommentBanner == -1);
@@ -2772,8 +2785,7 @@ Platform = function (app, listofnodes) {
             const isOneDayOld = (registeredTime >= oneDayInSeconds);
 
             if (isBannerDisabled) {
-                console.log('banner showbanner', bannerCommentComponent);
-                return bannerCommentComponent;
+                return isBannerDisabled;
             }
 
             if (!isOneDayOld) {
@@ -6371,7 +6383,7 @@ Platform = function (app, listofnodes) {
                                     a : 'Критерии для получения бонуса за оригинальный контент:  Каждые 15 тысяч просмотров видео + 1500 пятизвёздочных рейтингов от уникальных пользователей + 1500 реферальных пользователей <br />PKOIN или Bitcoin:  1,000 USDT <br />Как ускорить получение бонуса?<br />Делитесь ссылкой на видео в социальных сетях, с помощью мессенджеров или через почту. Выставляйте эксклюзивные материалы для подписчиков в Бастионе (это делается при создании поста, выбрать Для Подписчиков). Эксклюзивные материалы увеличат количество реферальных подписок.<br />Делитесь ссылкой на ваш профиль.<br />Всегда выбирайте Реферальная Ссылка, когда делитесь ссылкой на Бастион (на видео или профиль).<br />Если вы пригласите блоггера и докажете это, вы получите бонус в размере до 25% от первых 4 бонусов.<br />По вопросам обращайтесь support@bastyon.com.',
                                     img: ''
                                 },
-                                
+
                             ]
 
                         },
@@ -17621,13 +17633,13 @@ Platform = function (app, listofnodes) {
 
                     var n = -1
                     var uservout = _.find(tx.vout, (v) => {
-                        n ++ 
+                        n ++
                         return _.find(deep(v, 'scriptPubKey.addresses') || [], (a) => {
                             return a == address
                         })
                     })
-                    
-                    
+
+
                     /**/
                     var l = tx.vout.length
 
@@ -26050,7 +26062,7 @@ Platform = function (app, listofnodes) {
                 txid: "65fee9b1e925833c5ff623178efecc436d3af0c9f6a4baa0b73c52907a9d1d7b"
             })*/
 
-            // test coin 
+            // test coin
 
             //self.messageHandler({"addr":"TSVui5YmA3JNYvSjGK23Y2S8Rckb2eV3kn","msg":"transaction","txid":"a6819e0de29c148a193932da4581b79cae02163f717962a86ccbf259f915a4be","time":1657701744,"amount":"1000000","nout":"2","node":"116.203.219.28:39091:6067"})
 
@@ -27398,7 +27410,7 @@ Platform = function (app, listofnodes) {
 
         checkfeatures()
 
-        
+
 
         app.user.isState(function(state){
 
@@ -27509,22 +27521,22 @@ Platform = function (app, listofnodes) {
                             self.ui.popup('application');
                         }
                         else{
-                            
+
                             var a = self.sdk.address.pnet()
-    
+
                             if (a){
                                 var regs = self.sdk.registrations.value(a.address)
-    
+
                                 if(!regs){
                                     self.ui.popup('application');
                                 }
                             }
-                            
+
                         }
                     }
-                    
+
                 }
-                
+
             })
         }, 30000)
 
