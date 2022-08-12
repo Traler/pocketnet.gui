@@ -2701,7 +2701,7 @@ Platform = function (app, listofnodes) {
 
         },
 
-        showCommentBanner : function(contextElem) {
+        showCommentBanner : function(contextElem, callback, alredyCommented) {
 
             let bannerCommentComponent = null;
             if (!contextElem) {
@@ -2721,13 +2721,12 @@ Platform = function (app, listofnodes) {
                     essenseData: {},
 
                     clbk : function(e, p){
-                        bannerCommentComponent = p;
+                        callback(p);
                         if (p.el[0].constructor.name === 'HTMLDivElement') {
                             self.app.Logger.info({
                                 actionId: 'COMMENT_BANNER_SHOWED',
                                 value: p.el[0].constructor.name,
                             });
-
                             return;
                         }
                     }
@@ -2749,7 +2748,12 @@ Platform = function (app, listofnodes) {
             const isOneDayOld = (registeredTime >= oneDayInSeconds);
 
             if (isBannerDisabled) {
+                callback(null);
                 return isBannerDisabled;
+            }
+
+            if (alredyCommented) {
+                return;
             }
 
             if (!isOneDayOld) {

@@ -2734,7 +2734,7 @@ var comments = (function(){
 				}
 			},
 
-			showBanner : function(c) {
+			showBanner : function(c, callback) {
 				let alredyCommented;
 
 				if (c.essenseData.lastComment) {
@@ -2772,12 +2772,10 @@ var comments = (function(){
 					}
 				}
 
-				if (alredyCommented) {
-					return 'isCommented';
-				}
-
-				bannerComment = app.platform.ui.showCommentBanner(el.c);
-				return bannerComment;
+				app.platform.ui.showCommentBanner(el.c, (p) => {
+					bannerComment = p;
+					callback();
+				}, alredyCommented);
 			},
 
 			authclbk : function(){

@@ -2347,16 +2347,13 @@ var lenta = (function(){
 							setTimeout(function(){
 								if(!el.share[id]) return
 
-								const bannerComment = initedcommentes[id].showBanner(initedcommentes[id]);
-								if (!bannerComment) {
-									return;
-								}
-
-								self.app.platform.effects.templates.commentstars(el.share[id], value, function(){
-									if (initedcommentes[id]){
-										initedcommentes[id].attention(self.app.localization.e('starssendcomments'))
-									}
-								})
+								initedcommentes[id].showBanner(initedcommentes[id], () => {
+									self.app.platform.effects.templates.commentstars(el.share[id], value, function(){
+										if (initedcommentes[id]){
+											initedcommentes[id].attention(self.app.localization.e('starssendcomments'))
+										}
+									})
+								});
 							}, 300)
 						}
 

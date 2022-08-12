@@ -597,16 +597,13 @@ var post = (function () {
 					setTimeout(function(){
 						if(!el.c) return
 
-						const bannerComment = inicomments.showBanner(inicomments);
-						if (!bannerComment) {
-							return;
-						}
-
-						self.app.platform.effects.templates.commentstars(el.c, value, function(){
-							if (inicomments){
-								inicomments.attention(self.app.localization.e('starssendcomments'))
-							}
-						})
+						inicomments.showBanner(inicomments, () => {
+							self.app.platform.effects.templates.commentstars(el.c, value, function(){
+								if (inicomments){
+									inicomments.attention(self.app.localization.e('starssendcomments'))
+								}
+							})
+						});
 					}, 300)
 				}
 
