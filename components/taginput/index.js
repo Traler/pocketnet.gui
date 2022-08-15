@@ -253,6 +253,14 @@ var taginput = (function(){
 					essenseData.addTags(tags)
 				}
 			},
+
+			focusInput: function(){
+				if (el.tagSearch && essenseData.tags().length < 5) {
+					setTimeout(function(){
+						el.tagSearch.find('input').focus()
+					}, 500)
+				}
+			}
 		}
 
 		var renders = {
@@ -320,6 +328,8 @@ var taginput = (function(){
 
 		var initEvents = function(){
 			actions.initsearch()
+
+			events.focusInput();
 
 			renders.tags()
 		}
