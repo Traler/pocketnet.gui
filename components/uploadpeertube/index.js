@@ -226,7 +226,10 @@ var uploadpeertube = (function () {
 					return;
 				}
 
-				if (!videoInputFile[0].type.includes('video')) {
+				const isVideo = videoInputFile[0].type.includes('video');
+				const isAudio = videoInputFile[0].type.includes('audio');
+
+				if (!isVideo && !isAudio) {
 					showerror('videoFormatError')
 					return;
 				}
