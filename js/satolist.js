@@ -2737,7 +2737,7 @@ Platform = function (app, listofnodes) {
             const oneDayInSeconds = 86400;
 
             const alreadyShowed = ('nextCommentBanner' in localStorage);
-            const isBannerDisabled = (localStorage.nextCommentBanner == -1);
+            let isBannerDisabled = (localStorage.nextCommentBanner == -1);
             const timeToShowBanner = (unixTimeNow >= localStorage.nextCommentBanner);
 
             const regDate = app.platform.sdk.user.me().regdate;
@@ -2747,32 +2747,44 @@ Platform = function (app, listofnodes) {
             const repeat = (localStorage.nextCommentBanner == 1);
             const isOneDayOld = (registeredTime >= oneDayInSeconds);
 
-            if (isBannerDisabled) {
-                callback(null);
-                return isBannerDisabled;
-            }
-
-            if (alredyCommented) {
-                return;
+            if (alredyCommented || isBannerDisabled) {
+                isBannerDisabled = true;
             }
 
             if (!isOneDayOld) {
+                if (isBannerDisabled) {
+                    callback(null);
+                    return;
+                }
                 createComponent();
-                return bannerCommentComponent;
+                return;
             }
 
             if (repeat && timeToShowBanner) {
                 localStorage.nextCommentBanner = unixTimeNow + oneDayInSeconds;
+
+                if (isBannerDisabled) {
+                    callback(null);
+                    return;
+                }
+
                 createComponent();
-                return bannerCommentComponent;
+                return;
             }
 
             if (timeToShowBanner || !alreadyShowed) {
                 localStorage.nextCommentBanner = 1;
+
+                if (isBannerDisabled) {
+                    callback(null);
+                    return;
+                }
+
                 createComponent();
-                return bannerCommentComponent;
+                return;
             }
 
+            callback(null);
         },
 
         carousel : function(el, clbk){
