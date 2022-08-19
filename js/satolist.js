@@ -2742,10 +2742,10 @@ Platform = function (app, listofnodes) {
 
             const regDate = app.platform.sdk.user.me().regdate;
             const regUnixTime = (regDate.getTime());
-            const registeredTime = Date.now() - regUnixTime;
+            const registeredTime = (Date.now() - regUnixTime)/1000;
 
             const repeat = (localStorage.nextCommentBanner == 1);
-            const isOneDayOld = (registeredTime/1000 >= oneDayInSeconds);
+            const isOneDayOld = (registeredTime >= oneDayInSeconds);
 
             if (alredyCommented || isBannerDisabled) {
                 isBannerDisabled = true;
