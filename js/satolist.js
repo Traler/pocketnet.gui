@@ -2745,7 +2745,7 @@ Platform = function (app, listofnodes) {
             const registeredTime = Date.now() - regUnixTime;
 
             const repeat = (localStorage.nextCommentBanner == 1);
-            const isOneDayOld = (registeredTime >= oneDayInSeconds);
+            const isOneDayOld = (registeredTime/1000 >= oneDayInSeconds);
 
             if (alredyCommented || isBannerDisabled) {
                 isBannerDisabled = true;
@@ -2761,25 +2761,23 @@ Platform = function (app, listofnodes) {
             }
 
             if (repeat && timeToShowBanner) {
-                localStorage.nextCommentBanner = unixTimeNow + oneDayInSeconds;
-
                 if (isBannerDisabled) {
                     callback(null);
                     return;
                 }
 
+                localStorage.nextCommentBanner = unixTimeNow + oneDayInSeconds;
                 createComponent();
                 return;
             }
 
             if (timeToShowBanner || !alreadyShowed) {
-                localStorage.nextCommentBanner = 1;
-
                 if (isBannerDisabled) {
                     callback(null);
                     return;
                 }
 
+                localStorage.nextCommentBanner = 1;
                 createComponent();
                 return;
             }
