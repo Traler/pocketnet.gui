@@ -5444,7 +5444,6 @@ var lenta = (function(){
 				}*/
 
 				if(!essenseData.goback) p.clbk(null, p);
-
 			},
 
 			hideshowedvideo : function(){

@@ -267,6 +267,38 @@ var comments = (function(){
 				})	
 			},
 			
+			alertBlockedUser: function(elem, context, address = receiver) {
+				const usersStorage = app.platform.sdk.usersl.storage;
+				const userNumId = usersStorage[address].id;
+
+				const alertMessage = self.app.localization.e("cantCommentHere");
+
+				const isReply = (context == 'reply');
+				const isPost = (context == 'post');
+				const isBlockingYou = app.platform.sdk.users.userBlocksMe(userNumId);
+
+				if (!isBlockingYou) {
+					return;
+				}
+
+				if (isReply) {
+					sitemessage(alertMessage);
+					return true;
+				}
+
+				if (isPost) {
+					const elem = el.post.find('.leaveCommentPreview');
+
+					el.post.find('.post').off('click');
+
+					elem.addClass('youAreBlockedUser');
+					elem.attr('placeholder', alertMessage);
+					elem.attr('contenteditable', false);
+					elem.attr('readonly', 'readonly');
+
+					return true;
+				}
+			},
 
 			stateAction : function(clbk){
 
@@ -675,19 +707,27 @@ var comments = (function(){
 			},
 			reply : function(id, aid){
 
+				let _el = el.c.find('#' + id);
+				let answer = _el.find('.answer');
+
+				var pid = '0';
+
+				if (aid != id) {
+					pid = id;
+				}
+
+				var address = self.app.platform.sdk.comments.address(txid, aid, pid) || deep(ed, 'lastComment.address');
+
+				if (actions.alertBlockedUser(_el,'reply', address)) {
+					return;
+				}
+
+				if (actions.alertBlockedUser(_el,'reply', receiver)) {
+					return;
+				}
+
 				actions.stateAction(function(){
-
-					var _el = el.c.find('#' + id);
-					var answer = _el.find('.answer');
-				
 					renders.post(function(area, el){
-
-						var pid = '0'
-
-						if (aid != id) pid = id
-
-						var address = self.app.platform.sdk.comments.address(txid, aid, pid) || deep(ed, 'lastComment.address')
-
 						var name = (deep(self.app, 'platform.sdk.usersl.storage.'+address+'.name') || address)
 
 						var str = '@' + name + '  '
@@ -2053,41 +2093,43 @@ var comments = (function(){
 						})
 
 						if(_preview){
+							if (!actions.alertBlockedUser(el.c, 'post')) {
 
-							_p.el.find('textarea').on('click', function(){
+								_p.el.find('textarea').on('click', function(){
 
-								$(this).blur();
+									$(this).blur();
 
-								self.app.user.isState(function(state){
+									self.app.user.isState(function(state){
+
+										if(state){
+											ini()
+										}
+										else{
+											actions.stateAction(function(){
+											})
+										}
+
+									})
+
+								
+								})
+
+								_p.el.find('.embedEmojiPrivew').on('click', function(){
 
 									if(state){
-										ini()
+										ini(function(t, a){
+											t.showPicker()
+										})
 									}
 									else{
 										actions.stateAction(function(){
 										})
 									}
-
+								
+								
+								
 								})
-
-								
-							})
-
-							_p.el.find('.embedEmojiPrivew').on('click', function(){
-
-								if(state){
-									ini(function(t, a){
-										t.showPicker()
-									})	
-								}
-								else{
-									actions.stateAction(function(){
-									})
-								}
-								
-								
-								
-							})
+							}
 
 							if(clbk) clbk()
 

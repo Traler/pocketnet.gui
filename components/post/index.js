@@ -1114,6 +1114,7 @@ var post = (function () {
 									listpreview : false,
 
 									fromtop: !ed.fromempty,
+									receiver: share.address,
 									fromempty: ed.fromempty,
 									lastComment: ed.fromempty ? share.lastComment : null,
 									cantsend : checkvisibility,

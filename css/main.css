@@ -69,6 +69,7 @@
   --color-fb: 10, 35, 71;
   --color-menu-2: 100, 255, 237;
   --color-not-catchy-grey: 171, 171, 171;
+  --color-red: 157, 59, 59;
 }
 :root[theme='black'] {
   --background-hidden-layer: 10, 12, 23;
@@ -106,6 +107,8 @@
   --color-good: 7, 108, 52;
   --color-yellow: 255, 238, 0;
   --color-not-catchy-grey: 94, 98, 100;
+  --color-black-gray: 38, 39, 42;
+  --color-red: 193, 100, 100;
 }
 :root[theme='gray'] {
   --background-hidden-layer: 12, 12, 12;

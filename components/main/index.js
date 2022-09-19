@@ -1338,6 +1338,19 @@ var main = (function(){
 
 				//self.app.el.footer.addClass('workstation')
 
+				const address = self.sdk.user.me()?.address;
+
+				if (address) {
+					app.platform.sdk.users.getBlockingUsers(address).then(res=>{
+						console.log(res);
+						if (res) {
+							localStorage.blockingUsers = res;
+						}
+					});
+				} else {
+					localStorage.blockingUsers = null;
+				}
+
 				initEvents();
 
 				if(!p.goback){
@@ -1368,9 +1381,6 @@ var main = (function(){
 				make(function(){
 					p.clbk(null, p);
 				}, p)
-
-				
-				
 			}
 		}
 	};

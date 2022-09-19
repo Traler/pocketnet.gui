@@ -11664,6 +11664,57 @@ Platform = function (app, listofnodes) {
 
                 return point
 
+            },
+
+            userBlocksMe: function(targetUserNumId) {
+                let result = false;
+
+                const checkLocalStorage = () => {
+                    localStorage.blockingUsers.split(',').forEach(numId=>{
+                        const youAreBlocked = targetUserNumId == numId;
+                        if (youAreBlocked){
+                            result = true;
+                        }
+                    });
+                }
+
+                if (localStorage.blockingUsers) {
+                    checkLocalStorage();
+                    return result;
+                }
+                return result;
+            },
+
+            getBlockingUsers: async function(arg1, options = {}) {
+                let address = self.sdk.user.me().address;
+
+                if (typeof arg1 === 'object') {
+                    options = arg1;
+                } else if (typeof arg1 === 'string') {
+                    address = arg1;
+                }
+
+                console.log('tr-- Blocks for', address, options);
+
+                const blockersList = await self.app.api.rpc('getuserblockers', [address]);
+
+                /**
+                 * If populate is set, then UID will be converted to pUserInfo.
+                 *
+                 * Attention! It will do that while user is already cached.
+                 * If not, raw ID will be returned.
+                 **/
+                if (options.populate) {
+                    const usersStorageList = Object.values(self.sdk.users.storage);
+
+                    return blockersList.map((blockerId) => {
+                        const blockerAddress = usersStorageList.find(u => u.id === blockerId);
+
+                        return blockerAddress || blockerId;
+                    });
+                }
+
+                return blockersList;
             }
         },
 
