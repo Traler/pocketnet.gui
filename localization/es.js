@@ -249,7 +249,7 @@ _l.commentBannerTitle = "Deja un comentario para el autor";
 _l.commentBannerDescription = "Comentar te desbloquea nuevas funciones en Bastyon y te ayuda a encontrar amigos 😀";
 _l.dontShowAgain = 'No mostrar más';
 
-____loclib.cantCommentHere = "No pueden escribir aquí, porque el usuario lo ha bloqueado";
+_l.cantCommentHere = "No pueden escribir aquí, porque el usuario lo ha bloqueado";
 //share
 _l.newShare = "Nueva publicación";
 _l.scaption = "Título";

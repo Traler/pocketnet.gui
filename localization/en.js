@@ -1087,7 +1087,7 @@ _l.system16 = {
     }
 }
 
-____loclib.cantCommentHere = "You can't comment here, because this user is blocking you";
+_l.cantCommentHere = "You can't comment here, because this user is blocking you";
 
 _l.downvoteShareMessage = "downvoted your post"
 

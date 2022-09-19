@@ -1,4 +1,4 @@
-if(typeof loclib == "undefined" || !loclib)
+﻿if(typeof loclib == "undefined" || !loclib)
 	loclib = {};
 
 	loclib.ru = {};
@@ -278,7 +278,7 @@ _l.aynoblocked = "Вы еще никого не заблокировали";
 _l.lloadmore = "Загрузить больше публикаций!";
 _l.lloadprev = "Загрузить свежие материалы"
 
-____loclib.cantCommentHere = "Этот пользователь заблокировал вас";
+_l.cantCommentHere = "Этот пользователь заблокировал вас";
 
 
 _l.lend = "Конец ленты";
